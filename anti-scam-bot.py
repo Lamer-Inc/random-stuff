@@ -43,6 +43,36 @@ async def scan(ctx, *, arg):
                        'before using it')
 
 
+#Comando per scansionare link direttamente tramite il bot su Discord. Riferirsi a ipqualityscore per qualsiasi informazione o utilizzo. Per funzionare, necessita di un'API registrata.
+@b.command(name='check')
+async def check(ctx, *, arg):
+    link = 'https://ipqualityscore.com/api/json/url/******************/'
+    link_to_scan = str(arg)
+    json_url = link + link_to_scan
+    result = requests.get(json_url).json()
+    stato = result['message']
+    unsafe = result['unsafe']
+    #ip = result['ip_address']
+    spam = result['spamming']
+    pishing = result['phishing']
+    suspect = result['suspicious']
+    adult = result['adult']
+    risk = result['risk_score']
+    embed = discord.Embed(title='**Analisi del link richiesto: **', color=discord.Color.green())
+    embed.add_field(name='**Link scansionato** :', value=str(arg), inline=False)
+    embed.add_field(name='Stato della richiesta: ', value=stato, inline=False)
+    embed.add_field(name='**È pericoloso**? (True/False)', value=unsafe, inline=False)
+    embed.add_field(name='Spam link(True/False): ', value=spam, inline=False)
+    embed.add_field(name='Phishing link(True/False): ', value=pishing, inline=False)
+    embed.add_field(name='Link Sospetto(True/False): ', value=suspect, inline=False)
+    embed.add_field(name='Link a sito per adulti(True/False): ', value=adult, inline=False)
+    embed.add_field(name='Livello di rischio: ', value=risk, inline=False)
+    embed.add_field(name='**Crediti**: ', value='Programma realizzato interamente da DiStRuTtOrE_Tm#6449 ('
+                                                'ID=586202654087184384) usando le fantastiche api di '
+                                                'https://www.ipqualityscore.com', inline=False)
+    await ctx.send(embed=embed)
+
+
 b.run(token)
 
 #NOT COMPLETED YET, DO NOT REPOST WITHOUT CONSENS
