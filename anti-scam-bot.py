@@ -10,6 +10,27 @@ b = commands.Bot(command_prefix="!")
 b.remove_command("help")
 
 
+# https://python.plainenglish.io/how-to-change-discord-bot-status-with-discord-py-39219c8fceea for more on status!
+@b.event
+async def on_ready():
+    await b.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='!help for commands'))
+
+
+# "A Bit Of error handling for perms, argument and not found commands"
+@b.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send('Un permesso specifico è richiesto per eseguire questo comando')
+    elif isinstance(error, commands.MissingRequiredArgument):
+        embed = discord.Embed(title='**Missing Argument!**', color=discord.Color.red())
+        embed.add_field(name="Argomento mancante!", value='Digita !help per  maggiori informazioni', inline=False)
+        await ctx.send(embed=embed)
+    elif isinstance(error, commands.CommandNotFound):
+        embed = discord.Embed(title='**Comando non trovato!**', color=discord.Color.red())
+        embed.add_field(name='**Command Not Found**', value='!help per la lista di comandi', inline=False)
+        await ctx.send(embed=embed)
+
+
 @b.command(name='report')
 async def report(ctx, *, url):
     channel_to_scan = await b.fetch_channel(932337902078292050)
